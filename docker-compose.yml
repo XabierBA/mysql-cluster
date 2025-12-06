@@ -6,6 +6,7 @@ services:
       - MYSQL_ROOT_PASSWORD=root
       - CLUSTER_NAME=galera-cluster
       - MYSQL_CLUSTER_JOIN=pxc2,pxc3
+    command: --wsrep_cluster_address=gcomm://  # El primer nodo debe iniciar el cluster
     networks:
       - mysql_network
     ports:
@@ -13,29 +14,29 @@ services:
     volumes:
       - pxc1-data:/var/lib/mysql
 
+
   # Nodo MySQL 2
   pxc2:
     image: percona/percona-xtradb-cluster:8.0
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - CLUSTER_NAME=galera-cluster
-      - MYSQL_CLUSTER_JOIN=pxc1,pxc3
+      - MYSQL_CLUSTER_JOIN=pxc1,pxc3  # Este nodo se unirá a pxc1 y pxc3
     networks:
       - mysql_network
     volumes:
       - pxc2-data:/var/lib/mysql
 
-  # Nodo MySQL 3
-  pxc3:
-    image: percona/percona-xtradb-cluster:8.0
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - CLUSTER_NAME=galera-cluster
-      - MYSQL_CLUSTER_JOIN=pxc1,pxc2
-    networks:
-      - mysql_network
-    volumes:
-      - pxc3-data:/var/lib/mysql
+pxc3:
+  image: percona/percona-xtradb-cluster:8.0
+  environment:
+    - MYSQL_ROOT_PASSWORD=root
+    - CLUSTER_NAME=galera-cluster
+    - MYSQL_CLUSTER_JOIN=pxc1,pxc2  # Este nodo se unirá a pxc1 y pxc2
+  networks:
+    - mysql_network
+  volumes:
+    - pxc3-data:/var/lib/mysql
 
   # HAProxy para balanceo de carga
   haproxy:
