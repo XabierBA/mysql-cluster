@@ -2,7 +2,7 @@
 
 # Iniciar los contenedores con Docker Compose
 echo "Iniciando el clúster Galera..."
-docker-compose up -d
+docker compose up -d
 
 # Función para verificar si el contenedor está en ejecución
 wait_for_container() {
