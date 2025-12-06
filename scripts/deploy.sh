@@ -10,14 +10,14 @@ docker volume create mysql3-data 2>/dev/null || true
 
 # Iniciar contenedores
 echo "🐳 Levantando contenedores..."
-docker-compose up -d
+docker compose up -d
 
 echo "⏳ Esperando inicialización del cluster..."
 sleep 30
 
 # Verificar estado
 echo "🔍 Verificando estado..."
-docker-compose ps
+docker compose ps
 
 echo ""
 echo "✅ Cluster desplegado!"
