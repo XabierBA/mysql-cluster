@@ -46,12 +46,3 @@ services:
       - ./config/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
     networks:
       - mysql_network
-
-networks:
-  mysql_network:
-    driver: bridge
-
-volumes:
-  pxc1-data:
-  pxc2-data:
-  pxc3-data:
