@@ -1,62 +1,59 @@
+version: '3.8'
 
 services:
-  mysql-node1:
-    image: mariadb:10.5
+  # Nodo MySQL 1
+  pxc1:
+    image: percona/percona-xtradb-cluster:8.0
     environment:
-      - MYSQL_ROOT_PASSWORD=rootpw
-      - GALERA_CLUSTER_NAME=galera_cluster
-      - GALERA_NODE_ADDRESS=mysql-node1
-      - GALERA_CLUSTER_ADDRESS=gcomm://mysql-node1,mysql-node2,mysql-node3
-      - GALERA_NODE_NAME=mysql-node1
-      - WSREP_SST_METHOD=rsync
+      - MYSQL_ROOT_PASSWORD=root
+      - CLUSTER_NAME=galera-cluster
+      - MYSQL_CLUSTER_JOIN=pxc2,pxc3
+    networks:
+      - mysql_network
     ports:
       - "3306:3306"
     volumes:
-      - ./data/mysql-node1:/var/lib/mysql
-    networks:
-      - galera-net
+      - pxc1-data:/var/lib/mysql
 
-  mysql-node2:
-    image: mariadb:10.5
+  # Nodo MySQL 2
+  pxc2:
+    image: percona/percona-xtradb-cluster:8.0
     environment:
-      - MYSQL_ROOT_PASSWORD=rootpw
-      - GALERA_CLUSTER_NAME=galera_cluster
-      - GALERA_NODE_ADDRESS=mysql-node2
-      - GALERA_CLUSTER_ADDRESS=gcomm://mysql-node1,mysql-node2,mysql-node3
-      - GALERA_NODE_NAME=mysql-node2
-      - WSREP_SST_METHOD=rsync
-    ports:
-      - "3307:3306"
-    volumes:
-      - ./data/mysql-node2:/var/lib/mysql
+      - MYSQL_ROOT_PASSWORD=root
+      - CLUSTER_NAME=galera-cluster
+      - MYSQL_CLUSTER_JOIN=pxc1,pxc3
     networks:
-      - galera-net
+      - mysql_network
+    volumes:
+      - pxc2-data:/var/lib/mysql
 
-  mysql-node3:
-    image: mariadb:10.5
+  # Nodo MySQL 3
+  pxc3:
+    image: percona/percona-xtradb-cluster:8.0
     environment:
-      - MYSQL_ROOT_PASSWORD=rootpw
-      - GALERA_CLUSTER_NAME=galera_cluster
-      - GALERA_NODE_ADDRESS=mysql-node3
-      - GALERA_CLUSTER_ADDRESS=gcomm://mysql-node1,mysql-node2,mysql-node3
-      - GALERA_NODE_NAME=mysql-node3
-      - WSREP_SST_METHOD=rsync
-    ports:
-      - "3308:3306"
-    volumes:
-      - ./data/mysql-node3:/var/lib/mysql
+      - MYSQL_ROOT_PASSWORD=root
+      - CLUSTER_NAME=galera-cluster
+      - MYSQL_CLUSTER_JOIN=pxc1,pxc2
     networks:
-      - galera-net
+      - mysql_network
+    volumes:
+      - pxc3-data:/var/lib/mysql
 
+  # HAProxy para balanceo de carga
   haproxy:
     image: haproxy:latest
     ports:
-      - "3309:3306"
+      - "3307:3306"  # Puerto de balanceo de carga
     volumes:
       - ./config/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
     networks:
-      - galera-net
+      - mysql_network
 
 networks:
-  galera-net:
+  mysql_network:
     driver: bridge
+
+volumes:
+  pxc1-data:
+  pxc2-data:
+  pxc3-data:
