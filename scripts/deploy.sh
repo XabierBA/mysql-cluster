@@ -13,7 +13,7 @@ sleep 30
 
 # Ejecutar inicialización de la base de datos (si es necesario)
 echo "Inicializando la base de datos con el archivo init.sql..."
-docker exec -i pxc1 mysql -uroot -proot < /scripts/init.sql
+docker exec -i pxc1 mysql -uroot -proot < init.sql
 
 # Verificar el estado de los contenedores
 echo "Verificando el estado de los contenedores..."
