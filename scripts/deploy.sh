@@ -16,7 +16,7 @@ sudo docker ps
 # Inicializar la base de datos con un archivo init.sql
 echo "Inicializando la base de datos con el archivo init.sql..."
 if [ -f ./scripts/init.sql ]; then
-    sudo docker exec -i mysql-cluster-pxc1-1 mysql -uroot -proot < sinit.sql
+    sudo docker exec -i mysql-cluster-pxc1-1 mysql -uroot -proot < init.sql
 else
     echo "Error: No se encontró el archivo init.sql en ./scripts."
     exit 1
