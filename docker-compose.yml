@@ -1,5 +1,3 @@
-version: '3'
-
 services:
   # Nodo MySQL 1
   pxc1:
