@@ -3,7 +3,7 @@
 echo "Levantando los contenedores con Docker Compose..."
 
 # Levantar los contenedores con Docker Compose
-sudo docker-compose up -d
+sudo docker compose up -d
 
 # Esperar a que los contenedores estén listos
 echo "Esperando a que los contenedores estén listos..."
