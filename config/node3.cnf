@@ -1,0 +1,10 @@
+[mysqld]
+server-id=3
+wsrep_node_name=node3
+wsrep_cluster_name=pxc-cluster
+wsrep_provider=/usr/lib/galera4/libgalera_smm.so
+wsrep_sst_method=xtrabackup-v2
+wsrep_sst_auth=root:backup123
+binlog_format=ROW
+default_storage_engine=InnoDB
+innodb_autoinc_lock_mode=2
