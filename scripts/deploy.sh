@@ -5,7 +5,7 @@ mkdir -p data
 
 # Levantar contenedores con Docker Compose
 echo "Levantando los contenedores con Docker Compose..."
-docker-compose up -d
+docker compose up -d
 
 # Esperar a que los contenedores inicien completamente
 echo "Esperando a que los contenedores estén listos..."
